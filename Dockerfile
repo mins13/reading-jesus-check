@@ -1,10 +1,9 @@
-# 1단계: build
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /app
 COPY . .
-RUN gradle build -x test
+RUN chmod +x gradlew
+RUN ./gradlew build -x test
 
-# 2단계: run
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
