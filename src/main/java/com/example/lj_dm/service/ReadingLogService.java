@@ -49,11 +49,12 @@ public class ReadingLogService {
     public String toCsv(List<ReadingLog> logs) {
         // CSV 헤더
         StringBuilder sb = new StringBuilder();
-        sb.append("날짜,셀,이름\n");
+        sb.append("날짜,셀,이름,장수\n");
 
         for (ReadingLog log : logs) {
             sb.append(log.getReadingDate()).append(",")
                     .append(log.getCellName()).append(",")
+                    .append(log.getPages() == null ? "" : log.getPages())
                     .append(log.getName()).append("\n");
         }
 

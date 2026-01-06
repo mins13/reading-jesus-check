@@ -43,10 +43,16 @@ public class ReadingLog {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public ReadingLog(String name, String cellName, LocalDate readingDate) {
+    @Column
+    private Integer pages;
+
+
+    public ReadingLog(String name, String cellName, LocalDate readingDate, Integer pages) {
         this.name = name;
         this.cellName = cellName;
         this.readingDate = readingDate;
+        this.pages = pages;
         this.createdAt = LocalDateTime.now();
+
     }
 }

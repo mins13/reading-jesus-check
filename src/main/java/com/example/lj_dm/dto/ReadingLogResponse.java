@@ -8,14 +8,16 @@ public record ReadingLogResponse(
         Long id,
         String name,
         String cellName,
-        LocalDate readingDate
+        LocalDate readingDate,
+        Integer pages
 ) {
     public static ReadingLogResponse from(ReadingLog log) {
         return new ReadingLogResponse(
                 log.getId(),
                 log.getName(),
                 log.getCellName(),
-                log.getReadingDate()
+                log.getReadingDate(),
+                log.getPages()
         );
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/reading")
@@ -35,7 +35,8 @@ public class ReadingLogController {
         repository.save(new ReadingLog(
                 request.getName().trim(),
                 request.getCellName().trim(),
-                today
+                today,
+                request.getPages()
         ));
 
         return "오늘 완독 체크 완료 🙏";
@@ -46,5 +47,6 @@ public class ReadingLogController {
     static class ReadingRequest {
         private String name;
         private String cellName;
+        private Integer pages;
     }
 }
