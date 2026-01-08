@@ -23,7 +23,6 @@ public class ReadingLogService {
             case DAY -> new DateRange(base, base);
 
             case WEEK -> {
-                // 월~일 기준
                 LocalDate start = base.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
                 LocalDate end = base.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
                 yield new DateRange(start, end);
@@ -47,15 +46,16 @@ public class ReadingLogService {
     }
 
     public String toCsv(List<ReadingLog> logs) {
-        // CSV 헤더
         StringBuilder sb = new StringBuilder();
         sb.append("날짜,셀,이름,장수\n");
 
         for (ReadingLog log : logs) {
+            String pagesText = (log.getPages() == null) ? "완독" : String.valueOf(log.getPages());
+
             sb.append(log.getReadingDate()).append(",")
                     .append(log.getCellName()).append(",")
-                    .append(log.getName()).append(",")   // ✅ 이름 먼저
-                    .append(log.getPages() == null ? "" : log.getPages()) // ✅ 장수
+                    .append(log.getName()).append(",")
+                    .append(pagesText)
                     .append("\n");
         }
 

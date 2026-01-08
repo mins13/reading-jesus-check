@@ -9,12 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     /**
-     * 예:
-     * - 로컬: http://localhost:5173
-     * - 배포: https://reading-jesus-frontend.onrender.com
+     * 환경변수로 제어:
+     * - CORS_ALLOWED_ORIGINS=https://reading-jesus.duckdns.org,http://localhost:5173
      *
-     * Render 환경변수:
-     * CORS_ALLOWED_ORIGINS=https://xxx.onrender.com
+     * Spring에서는 아래 프로퍼티로 매핑됨:
+     * - cors.allowed-origins
      */
     @Value("${cors.allowed-origins:http://localhost:5173}")
     private String allowedOrigins;
