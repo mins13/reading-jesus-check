@@ -55,7 +55,7 @@ public class ReadingLogService {
             sb.append(log.getReadingDate()).append(",")
                     .append(log.getCellName()).append(",")
                     .append(log.getName()).append(",")   // ✅ 이름 먼저
-                    .append(log.getPages() == null ? "" : log.getPages()) // ✅ 장수
+                    .append(log.getPages() == null ? "완독" : log.getPages())// ✅ 장수
                     .append("\n");
         }
 
