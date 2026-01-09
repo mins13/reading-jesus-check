@@ -3,13 +3,13 @@ package com.example.lj_dm.dto;
 import com.example.lj_dm.domain.ReadingLog;
 
 import java.time.LocalDate;
-//d
+
 public record ReadingLogResponse(
         Long id,
         String name,
         String cellName,
         LocalDate readingDate,
-        String pagesText
+        Integer pages
 ) {
     public static ReadingLogResponse from(ReadingLog log) {
         return new ReadingLogResponse(
@@ -17,7 +17,7 @@ public record ReadingLogResponse(
                 log.getName(),
                 log.getCellName(),
                 log.getReadingDate(),
-                log.getPagesText()
+                log.getPages()
         );
     }
 }
