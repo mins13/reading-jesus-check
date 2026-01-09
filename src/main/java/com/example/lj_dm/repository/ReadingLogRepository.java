@@ -12,5 +12,7 @@ public interface ReadingLogRepository extends JpaRepository<ReadingLog, Long> {
 
     List<ReadingLog> findAllByReadingDateBetweenOrderByReadingDateAsc(LocalDate start, LocalDate end);
 
-    List<ReadingLog> findAllByReadingDateBetweenAndCellNameOrderByReadingDateAsc(LocalDate start, LocalDate end, String cellName);
+    List<ReadingLog> findAllByReadingDateBetweenAndCellNameOrderByReadingDateAsc(
+            LocalDate start, LocalDate end, String cellName
+    );
 }

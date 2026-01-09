@@ -9,17 +9,15 @@ public record ReadingLogResponse(
         String name,
         String cellName,
         LocalDate readingDate,
-        String pages   // ✅ Integer -> String
+        String pagesText
 ) {
     public static ReadingLogResponse from(ReadingLog log) {
-        String pagesText = (log.getPages() == null) ? "완독" : String.valueOf(log.getPages());
-
         return new ReadingLogResponse(
                 log.getId(),
                 log.getName(),
                 log.getCellName(),
                 log.getReadingDate(),
-                pagesText
+                log.getPagesText()
         );
     }
 }

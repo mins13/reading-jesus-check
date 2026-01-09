@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,44 +26,30 @@ public class ReadingLogController {
             return "셀을 선택해 주세요.";
         }
 
-        String name = request.getName().trim();
-        String cell = request.getCellName().trim();
+        // ✅ 무조건 한국 날짜 기준
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
 
-        LocalDate today = LocalDate.now();
+        String name = request.getName().trim();
+        String cellName = request.getCellName().trim();
 
         if (repository.existsByReadingDateAndName(today, name)) {
             return "이미 오늘 기록이 있습니다.";
         }
 
-        // ✅ status 처리 (없으면 기존 방식 호환)
-        Integer pagesToSave = null;
-
-        if (request.getStatus() == null || request.getStatus().isBlank()) {
-            // 기존 호환: pages가 있으면 장수, 없으면 완독
-            pagesToSave = request.getPages();
+        // ✅ 기록 방식:
+        // - status=COMPLETED => "완독"
+        // - status=PAGES + pagesNumber => "3" 같은 문자열
+        // - 둘 다 없으면 기본 "완독" 처리(안전)
+        String pagesText;
+        if ("PAGES".equalsIgnoreCase(request.getStatus())) {
+            Integer n = request.getPagesNumber();
+            if (n == null || n < 0) return "장수는 0 이상의 숫자로 입력해 주세요.";
+            pagesText = String.valueOf(n);
         } else {
-            String st = request.getStatus().trim().toUpperCase();
-
-            if ("COMPLETED".equals(st) || "DONE".equals(st)) {
-                pagesToSave = null; // ✅ 완독
-            } else if ("PAGES".equals(st)) {
-                if (request.getPages() == null || request.getPages() < 0) {
-                    return "장수는 0 이상의 숫자로 입력해 주세요.";
-                }
-                pagesToSave = request.getPages();
-            } else {
-                // 알 수 없는 status 들어오면 안전하게 기존처럼 처리
-                pagesToSave = request.getPages();
-            }
+            pagesText = "완독";
         }
 
-        repository.save(new ReadingLog(
-                name,
-                cell,
-                today,
-                pagesToSave
-        ));
-
+        repository.save(new ReadingLog(name, cellName, today, pagesText));
         return "오늘 기록 완료 🙏";
     }
 
@@ -72,10 +59,14 @@ public class ReadingLogController {
         private String name;
         private String cellName;
 
-        // ✅ 추가: COMPLETED 또는 PAGES
+        /**
+         * COMPLETED | PAGES
+         */
         private String status;
 
-        // 장수 입력일 때 사용
-        private Integer pages;
+        /**
+         * status=PAGES 일 때만 사용
+         */
+        private Integer pagesNumber;
     }
 }

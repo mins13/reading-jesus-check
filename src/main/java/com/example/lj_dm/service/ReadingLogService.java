@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -17,7 +18,10 @@ public class ReadingLogService {
     private final ReadingLogRepository repository;
 
     public DateRange resolveRange(PeriodType period, LocalDate 기준일) {
-        LocalDate base = (기준일 == null) ? LocalDate.now() : 기준일;
+        // ✅ 기준일이 없으면 KST 기준 오늘
+        LocalDate base = (기준일 == null)
+                ? LocalDate.now(ZoneId.of("Asia/Seoul"))
+                : 기준일;
 
         return switch (period) {
             case DAY -> new DateRange(base, base);
@@ -42,7 +46,9 @@ public class ReadingLogService {
         if (cellName == null || cellName.isBlank()) {
             return repository.findAllByReadingDateBetweenOrderByReadingDateAsc(range.start(), range.end());
         }
-        return repository.findAllByReadingDateBetweenAndCellNameOrderByReadingDateAsc(range.start(), range.end(), cellName);
+        return repository.findAllByReadingDateBetweenAndCellNameOrderByReadingDateAsc(
+                range.start(), range.end(), cellName
+        );
     }
 
     public String toCsv(List<ReadingLog> logs) {
@@ -50,15 +56,12 @@ public class ReadingLogService {
         sb.append("날짜,셀,이름,장수\n");
 
         for (ReadingLog log : logs) {
-            String pagesText = (log.getPages() == null) ? "완독" : String.valueOf(log.getPages());
-
             sb.append(log.getReadingDate()).append(",")
                     .append(log.getCellName()).append(",")
                     .append(log.getName()).append(",")
-                    .append(pagesText)
+                    .append(log.getPagesText() == null ? "" : log.getPagesText())
                     .append("\n");
         }
-
         return sb.toString();
     }
 }
