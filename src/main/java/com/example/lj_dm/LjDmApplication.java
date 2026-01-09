@@ -1,20 +1,13 @@
 package com.example.lj_dm;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.TimeZone;
-
+//d
 @SpringBootApplication
 public class LjDmApplication {
-
-    @PostConstruct
-    public void init() {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(LjDmApplication.class, args);
     }
+
 }

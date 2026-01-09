@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "reading_log",
         uniqueConstraints = {
+                // 같은 날짜 + 은 이름은 1번만 저장되게
                 @UniqueConstraint(name = "uk_reading_date_name", columnNames = {"reading_date", "name"})
         },
         indexes = {
@@ -26,29 +27,32 @@ public class ReadingLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 누가
     @Column(nullable = false, length = 30)
     private String name;
 
+    // 어느 셀
     @Column(name = "cell_name", nullable = false, length = 10)
     private String cellName;
 
+    // 언제 읽었는지
     @Column(name = "reading_date", nullable = false)
     private LocalDate readingDate;
 
+    // 생성 시간
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * ✅ "완독" 또는 "3" 같은 문자열 저장
-     */
-    @Column(name = "pages_text", length = 20)
-    private String pagesText;
+    @Column
+    private Integer pages;
 
-    public ReadingLog(String name, String cellName, LocalDate readingDate, String pagesText) {
+
+    public ReadingLog(String name, String cellName, LocalDate readingDate, Integer pages) {
         this.name = name;
         this.cellName = cellName;
         this.readingDate = readingDate;
-        this.pagesText = pagesText;
+        this.pages = pages;
         this.createdAt = LocalDateTime.now();
+
     }
 }

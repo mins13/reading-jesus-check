@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/reading")
@@ -20,6 +21,16 @@ public class ReadingLogExportController {
 
     private final ReadingLogService service;
 
+    /**
+     * 예)
+     * /api/reading/export?period=DAY
+     * /api/reading/export?period=WEEK
+     * /api/reading/export?period=MONTH
+     *
+     * (옵션)
+     * /api/reading/export?period=WEEK&date=2026-01-06
+     * /api/reading/export?period=WEEK&cellName=1
+     */
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportCsv(
             @RequestParam PeriodType period,
@@ -29,6 +40,7 @@ public class ReadingLogExportController {
         List<ReadingLog> logs = service.getLogs(period, date, cellName);
         String csv = service.toCsv(logs);
 
+        // 엑셀에서 한글 깨짐 방지용 UTF-8 BOM
         byte[] bom = new byte[] {(byte)0xEF, (byte)0xBB, (byte)0xBF};
         byte[] body = csv.getBytes(StandardCharsets.UTF_8);
 

@@ -3,7 +3,7 @@ package com.example.lj_dm.dto;
 import com.example.lj_dm.domain.ReadingLog;
 
 import java.time.LocalDate;
-
+//d
 public record ReadingLogResponse(
         Long id,
         String name,

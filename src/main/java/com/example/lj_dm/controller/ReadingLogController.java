@@ -23,7 +23,7 @@ public class ReadingLogController {
             return "이름을 입력해 주세요.";
         }
         if (request.getCellName() == null || request.getCellName().isBlank()) {
-            return "셀을 선택해 주세요.";
+            return "셀을 선택해 주세요";
         }
 
         // ✅ 무조건 한국 날짜 기준

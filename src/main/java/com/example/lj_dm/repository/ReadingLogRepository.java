@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-
+//d
 public interface ReadingLogRepository extends JpaRepository<ReadingLog, Long> {
 
     boolean existsByReadingDateAndName(LocalDate readingDate, String name);
